@@ -1171,6 +1171,76 @@ static void mavlink_test_hil_extended(uint8_t system_id, uint8_t component_id, m
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
 
+static void mavlink_test_ndi_status(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_NDI_STATUS >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_ndi_status_t packet_in = {
+        93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0,297.0,325.0,353.0,381.0,409.0,437.0,465.0,493.0
+    };
+    mavlink_ndi_status_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.timestamp = packet_in.timestamp;
+        packet1.airsp_setpoint_raw = packet_in.airsp_setpoint_raw;
+        packet1.fpa_setpoint_raw = packet_in.fpa_setpoint_raw;
+        packet1.roll_setpoint_raw = packet_in.roll_setpoint_raw;
+        packet1.airsp_setpoint = packet_in.airsp_setpoint;
+        packet1.fpa_setpoint = packet_in.fpa_setpoint;
+        packet1.roll_setpoint = packet_in.roll_setpoint;
+        packet1.throt_setpoint = packet_in.throt_setpoint;
+        packet1.throt_fb = packet_in.throt_fb;
+        packet1.throt_trim = packet_in.throt_trim;
+        packet1.pitch_setpoint = packet_in.pitch_setpoint;
+        packet1.pitch_fb = packet_in.pitch_fb;
+        packet1.pitch_trim = packet_in.pitch_trim;
+        packet1.err_bound = packet_in.err_bound;
+        packet1.filtered_airsp = packet_in.filtered_airsp;
+        packet1.filtered_fpa = packet_in.filtered_fpa;
+        packet1.air_density = packet_in.air_density;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ndi_status_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_ndi_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ndi_status_pack(system_id, component_id, &msg , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.air_density );
+    mavlink_msg_ndi_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ndi_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.air_density );
+    mavlink_msg_ndi_status_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_ndi_status_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_ndi_status_send(MAVLINK_COMM_1 , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.air_density );
+    mavlink_msg_ndi_status_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+}
+
 static void mavlink_test_ASLUAV(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
     mavlink_test_command_int_stamped(system_id, component_id, last_msg);
@@ -1191,6 +1261,7 @@ static void mavlink_test_ASLUAV(uint8_t system_id, uint8_t component_id, mavlink
     mavlink_test_satcom_link_status(system_id, component_id, last_msg);
     mavlink_test_sensor_airflow_angles(system_id, component_id, last_msg);
     mavlink_test_hil_extended(system_id, component_id, last_msg);
+    mavlink_test_ndi_status(system_id, component_id, last_msg);
 }
 
 #ifdef __cplusplus
