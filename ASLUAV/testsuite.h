@@ -1183,7 +1183,7 @@ static void mavlink_test_ndi_status(uint8_t system_id, uint8_t component_id, mav
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_ndi_status_t packet_in = {
-        93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0,297.0,325.0,353.0,381.0,409.0,437.0,465.0,493.0
+        93372036854775807ULL,73.0,101.0,129.0,157.0,185.0,213.0,241.0,269.0,297.0,325.0,353.0,381.0,409.0,437.0,465.0,493.0,521.0,549.0
     };
     mavlink_ndi_status_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -1203,6 +1203,8 @@ static void mavlink_test_ndi_status(uint8_t system_id, uint8_t component_id, mav
         packet1.err_bound = packet_in.err_bound;
         packet1.filtered_airsp = packet_in.filtered_airsp;
         packet1.filtered_fpa = packet_in.filtered_fpa;
+        packet1.filtered_airsp_rate = packet_in.filtered_airsp_rate;
+        packet1.filtered_fpa_rate = packet_in.filtered_fpa_rate;
         packet1.air_density = packet_in.air_density;
         
         
@@ -1218,12 +1220,12 @@ static void mavlink_test_ndi_status(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_ndi_status_pack(system_id, component_id, &msg , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.air_density );
+    mavlink_msg_ndi_status_pack(system_id, component_id, &msg , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.filtered_airsp_rate , packet1.filtered_fpa_rate , packet1.air_density );
     mavlink_msg_ndi_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_ndi_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.air_density );
+    mavlink_msg_ndi_status_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.filtered_airsp_rate , packet1.filtered_fpa_rate , packet1.air_density );
     mavlink_msg_ndi_status_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -1236,7 +1238,7 @@ static void mavlink_test_ndi_status(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_ndi_status_send(MAVLINK_COMM_1 , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.air_density );
+    mavlink_msg_ndi_status_send(MAVLINK_COMM_1 , packet1.timestamp , packet1.airsp_setpoint_raw , packet1.fpa_setpoint_raw , packet1.roll_setpoint_raw , packet1.airsp_setpoint , packet1.fpa_setpoint , packet1.roll_setpoint , packet1.throt_setpoint , packet1.throt_fb , packet1.throt_trim , packet1.pitch_setpoint , packet1.pitch_fb , packet1.pitch_trim , packet1.err_bound , packet1.filtered_airsp , packet1.filtered_fpa , packet1.filtered_airsp_rate , packet1.filtered_fpa_rate , packet1.air_density );
     mavlink_msg_ndi_status_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

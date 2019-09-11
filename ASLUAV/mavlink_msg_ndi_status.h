@@ -21,16 +21,18 @@ typedef struct __mavlink_ndi_status_t {
  float err_bound; /*< [m] Track error boundary*/
  float filtered_airsp; /*< [m/s] Filtered airspeed state*/
  float filtered_fpa; /*< [deg] Filtered flight path angle state*/
+ float filtered_airsp_rate; /*< [m/s^2] Filtered airspeed rate*/
+ float filtered_fpa_rate; /*< [deg/s] Filtered flight path angle rate*/
  float air_density; /*< [kg/m^3] Calculated air density*/
 }) mavlink_ndi_status_t;
 
-#define MAVLINK_MSG_ID_NDI_STATUS_LEN 72
-#define MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN 72
-#define MAVLINK_MSG_ID_217_LEN 72
-#define MAVLINK_MSG_ID_217_MIN_LEN 72
+#define MAVLINK_MSG_ID_NDI_STATUS_LEN 80
+#define MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN 80
+#define MAVLINK_MSG_ID_217_LEN 80
+#define MAVLINK_MSG_ID_217_MIN_LEN 80
 
-#define MAVLINK_MSG_ID_NDI_STATUS_CRC 72
-#define MAVLINK_MSG_ID_217_CRC 72
+#define MAVLINK_MSG_ID_NDI_STATUS_CRC 218
+#define MAVLINK_MSG_ID_217_CRC 218
 
 
 
@@ -38,7 +40,7 @@ typedef struct __mavlink_ndi_status_t {
 #define MAVLINK_MESSAGE_INFO_NDI_STATUS { \
     217, \
     "NDI_STATUS", \
-    17, \
+    19, \
     {  { "timestamp", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_ndi_status_t, timestamp) }, \
          { "airsp_setpoint_raw", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_ndi_status_t, airsp_setpoint_raw) }, \
          { "fpa_setpoint_raw", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_ndi_status_t, fpa_setpoint_raw) }, \
@@ -55,13 +57,15 @@ typedef struct __mavlink_ndi_status_t {
          { "err_bound", NULL, MAVLINK_TYPE_FLOAT, 0, 56, offsetof(mavlink_ndi_status_t, err_bound) }, \
          { "filtered_airsp", NULL, MAVLINK_TYPE_FLOAT, 0, 60, offsetof(mavlink_ndi_status_t, filtered_airsp) }, \
          { "filtered_fpa", NULL, MAVLINK_TYPE_FLOAT, 0, 64, offsetof(mavlink_ndi_status_t, filtered_fpa) }, \
-         { "air_density", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_ndi_status_t, air_density) }, \
+         { "filtered_airsp_rate", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_ndi_status_t, filtered_airsp_rate) }, \
+         { "filtered_fpa_rate", NULL, MAVLINK_TYPE_FLOAT, 0, 72, offsetof(mavlink_ndi_status_t, filtered_fpa_rate) }, \
+         { "air_density", NULL, MAVLINK_TYPE_FLOAT, 0, 76, offsetof(mavlink_ndi_status_t, air_density) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_NDI_STATUS { \
     "NDI_STATUS", \
-    17, \
+    19, \
     {  { "timestamp", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_ndi_status_t, timestamp) }, \
          { "airsp_setpoint_raw", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_ndi_status_t, airsp_setpoint_raw) }, \
          { "fpa_setpoint_raw", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_ndi_status_t, fpa_setpoint_raw) }, \
@@ -78,7 +82,9 @@ typedef struct __mavlink_ndi_status_t {
          { "err_bound", NULL, MAVLINK_TYPE_FLOAT, 0, 56, offsetof(mavlink_ndi_status_t, err_bound) }, \
          { "filtered_airsp", NULL, MAVLINK_TYPE_FLOAT, 0, 60, offsetof(mavlink_ndi_status_t, filtered_airsp) }, \
          { "filtered_fpa", NULL, MAVLINK_TYPE_FLOAT, 0, 64, offsetof(mavlink_ndi_status_t, filtered_fpa) }, \
-         { "air_density", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_ndi_status_t, air_density) }, \
+         { "filtered_airsp_rate", NULL, MAVLINK_TYPE_FLOAT, 0, 68, offsetof(mavlink_ndi_status_t, filtered_airsp_rate) }, \
+         { "filtered_fpa_rate", NULL, MAVLINK_TYPE_FLOAT, 0, 72, offsetof(mavlink_ndi_status_t, filtered_fpa_rate) }, \
+         { "air_density", NULL, MAVLINK_TYPE_FLOAT, 0, 76, offsetof(mavlink_ndi_status_t, air_density) }, \
          } \
 }
 #endif
@@ -105,11 +111,13 @@ typedef struct __mavlink_ndi_status_t {
  * @param err_bound [m] Track error boundary
  * @param filtered_airsp [m/s] Filtered airspeed state
  * @param filtered_fpa [deg] Filtered flight path angle state
+ * @param filtered_airsp_rate [m/s^2] Filtered airspeed rate
+ * @param filtered_fpa_rate [deg/s] Filtered flight path angle rate
  * @param air_density [kg/m^3] Calculated air density
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_ndi_status_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint64_t timestamp, float airsp_setpoint_raw, float fpa_setpoint_raw, float roll_setpoint_raw, float airsp_setpoint, float fpa_setpoint, float roll_setpoint, float throt_setpoint, float throt_fb, float throt_trim, float pitch_setpoint, float pitch_fb, float pitch_trim, float err_bound, float filtered_airsp, float filtered_fpa, float air_density)
+                               uint64_t timestamp, float airsp_setpoint_raw, float fpa_setpoint_raw, float roll_setpoint_raw, float airsp_setpoint, float fpa_setpoint, float roll_setpoint, float throt_setpoint, float throt_fb, float throt_trim, float pitch_setpoint, float pitch_fb, float pitch_trim, float err_bound, float filtered_airsp, float filtered_fpa, float filtered_airsp_rate, float filtered_fpa_rate, float air_density)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_NDI_STATUS_LEN];
@@ -129,7 +137,9 @@ static inline uint16_t mavlink_msg_ndi_status_pack(uint8_t system_id, uint8_t co
     _mav_put_float(buf, 56, err_bound);
     _mav_put_float(buf, 60, filtered_airsp);
     _mav_put_float(buf, 64, filtered_fpa);
-    _mav_put_float(buf, 68, air_density);
+    _mav_put_float(buf, 68, filtered_airsp_rate);
+    _mav_put_float(buf, 72, filtered_fpa_rate);
+    _mav_put_float(buf, 76, air_density);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_NDI_STATUS_LEN);
 #else
@@ -150,6 +160,8 @@ static inline uint16_t mavlink_msg_ndi_status_pack(uint8_t system_id, uint8_t co
     packet.err_bound = err_bound;
     packet.filtered_airsp = filtered_airsp;
     packet.filtered_fpa = filtered_fpa;
+    packet.filtered_airsp_rate = filtered_airsp_rate;
+    packet.filtered_fpa_rate = filtered_fpa_rate;
     packet.air_density = air_density;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_NDI_STATUS_LEN);
@@ -181,12 +193,14 @@ static inline uint16_t mavlink_msg_ndi_status_pack(uint8_t system_id, uint8_t co
  * @param err_bound [m] Track error boundary
  * @param filtered_airsp [m/s] Filtered airspeed state
  * @param filtered_fpa [deg] Filtered flight path angle state
+ * @param filtered_airsp_rate [m/s^2] Filtered airspeed rate
+ * @param filtered_fpa_rate [deg/s] Filtered flight path angle rate
  * @param air_density [kg/m^3] Calculated air density
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_ndi_status_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint64_t timestamp,float airsp_setpoint_raw,float fpa_setpoint_raw,float roll_setpoint_raw,float airsp_setpoint,float fpa_setpoint,float roll_setpoint,float throt_setpoint,float throt_fb,float throt_trim,float pitch_setpoint,float pitch_fb,float pitch_trim,float err_bound,float filtered_airsp,float filtered_fpa,float air_density)
+                                   uint64_t timestamp,float airsp_setpoint_raw,float fpa_setpoint_raw,float roll_setpoint_raw,float airsp_setpoint,float fpa_setpoint,float roll_setpoint,float throt_setpoint,float throt_fb,float throt_trim,float pitch_setpoint,float pitch_fb,float pitch_trim,float err_bound,float filtered_airsp,float filtered_fpa,float filtered_airsp_rate,float filtered_fpa_rate,float air_density)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_NDI_STATUS_LEN];
@@ -206,7 +220,9 @@ static inline uint16_t mavlink_msg_ndi_status_pack_chan(uint8_t system_id, uint8
     _mav_put_float(buf, 56, err_bound);
     _mav_put_float(buf, 60, filtered_airsp);
     _mav_put_float(buf, 64, filtered_fpa);
-    _mav_put_float(buf, 68, air_density);
+    _mav_put_float(buf, 68, filtered_airsp_rate);
+    _mav_put_float(buf, 72, filtered_fpa_rate);
+    _mav_put_float(buf, 76, air_density);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_NDI_STATUS_LEN);
 #else
@@ -227,6 +243,8 @@ static inline uint16_t mavlink_msg_ndi_status_pack_chan(uint8_t system_id, uint8
     packet.err_bound = err_bound;
     packet.filtered_airsp = filtered_airsp;
     packet.filtered_fpa = filtered_fpa;
+    packet.filtered_airsp_rate = filtered_airsp_rate;
+    packet.filtered_fpa_rate = filtered_fpa_rate;
     packet.air_density = air_density;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_NDI_STATUS_LEN);
@@ -246,7 +264,7 @@ static inline uint16_t mavlink_msg_ndi_status_pack_chan(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_ndi_status_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_ndi_status_t* ndi_status)
 {
-    return mavlink_msg_ndi_status_pack(system_id, component_id, msg, ndi_status->timestamp, ndi_status->airsp_setpoint_raw, ndi_status->fpa_setpoint_raw, ndi_status->roll_setpoint_raw, ndi_status->airsp_setpoint, ndi_status->fpa_setpoint, ndi_status->roll_setpoint, ndi_status->throt_setpoint, ndi_status->throt_fb, ndi_status->throt_trim, ndi_status->pitch_setpoint, ndi_status->pitch_fb, ndi_status->pitch_trim, ndi_status->err_bound, ndi_status->filtered_airsp, ndi_status->filtered_fpa, ndi_status->air_density);
+    return mavlink_msg_ndi_status_pack(system_id, component_id, msg, ndi_status->timestamp, ndi_status->airsp_setpoint_raw, ndi_status->fpa_setpoint_raw, ndi_status->roll_setpoint_raw, ndi_status->airsp_setpoint, ndi_status->fpa_setpoint, ndi_status->roll_setpoint, ndi_status->throt_setpoint, ndi_status->throt_fb, ndi_status->throt_trim, ndi_status->pitch_setpoint, ndi_status->pitch_fb, ndi_status->pitch_trim, ndi_status->err_bound, ndi_status->filtered_airsp, ndi_status->filtered_fpa, ndi_status->filtered_airsp_rate, ndi_status->filtered_fpa_rate, ndi_status->air_density);
 }
 
 /**
@@ -260,7 +278,7 @@ static inline uint16_t mavlink_msg_ndi_status_encode(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_ndi_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_ndi_status_t* ndi_status)
 {
-    return mavlink_msg_ndi_status_pack_chan(system_id, component_id, chan, msg, ndi_status->timestamp, ndi_status->airsp_setpoint_raw, ndi_status->fpa_setpoint_raw, ndi_status->roll_setpoint_raw, ndi_status->airsp_setpoint, ndi_status->fpa_setpoint, ndi_status->roll_setpoint, ndi_status->throt_setpoint, ndi_status->throt_fb, ndi_status->throt_trim, ndi_status->pitch_setpoint, ndi_status->pitch_fb, ndi_status->pitch_trim, ndi_status->err_bound, ndi_status->filtered_airsp, ndi_status->filtered_fpa, ndi_status->air_density);
+    return mavlink_msg_ndi_status_pack_chan(system_id, component_id, chan, msg, ndi_status->timestamp, ndi_status->airsp_setpoint_raw, ndi_status->fpa_setpoint_raw, ndi_status->roll_setpoint_raw, ndi_status->airsp_setpoint, ndi_status->fpa_setpoint, ndi_status->roll_setpoint, ndi_status->throt_setpoint, ndi_status->throt_fb, ndi_status->throt_trim, ndi_status->pitch_setpoint, ndi_status->pitch_fb, ndi_status->pitch_trim, ndi_status->err_bound, ndi_status->filtered_airsp, ndi_status->filtered_fpa, ndi_status->filtered_airsp_rate, ndi_status->filtered_fpa_rate, ndi_status->air_density);
 }
 
 /**
@@ -283,11 +301,13 @@ static inline uint16_t mavlink_msg_ndi_status_encode_chan(uint8_t system_id, uin
  * @param err_bound [m] Track error boundary
  * @param filtered_airsp [m/s] Filtered airspeed state
  * @param filtered_fpa [deg] Filtered flight path angle state
+ * @param filtered_airsp_rate [m/s^2] Filtered airspeed rate
+ * @param filtered_fpa_rate [deg/s] Filtered flight path angle rate
  * @param air_density [kg/m^3] Calculated air density
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_ndi_status_send(mavlink_channel_t chan, uint64_t timestamp, float airsp_setpoint_raw, float fpa_setpoint_raw, float roll_setpoint_raw, float airsp_setpoint, float fpa_setpoint, float roll_setpoint, float throt_setpoint, float throt_fb, float throt_trim, float pitch_setpoint, float pitch_fb, float pitch_trim, float err_bound, float filtered_airsp, float filtered_fpa, float air_density)
+static inline void mavlink_msg_ndi_status_send(mavlink_channel_t chan, uint64_t timestamp, float airsp_setpoint_raw, float fpa_setpoint_raw, float roll_setpoint_raw, float airsp_setpoint, float fpa_setpoint, float roll_setpoint, float throt_setpoint, float throt_fb, float throt_trim, float pitch_setpoint, float pitch_fb, float pitch_trim, float err_bound, float filtered_airsp, float filtered_fpa, float filtered_airsp_rate, float filtered_fpa_rate, float air_density)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_NDI_STATUS_LEN];
@@ -307,7 +327,9 @@ static inline void mavlink_msg_ndi_status_send(mavlink_channel_t chan, uint64_t 
     _mav_put_float(buf, 56, err_bound);
     _mav_put_float(buf, 60, filtered_airsp);
     _mav_put_float(buf, 64, filtered_fpa);
-    _mav_put_float(buf, 68, air_density);
+    _mav_put_float(buf, 68, filtered_airsp_rate);
+    _mav_put_float(buf, 72, filtered_fpa_rate);
+    _mav_put_float(buf, 76, air_density);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NDI_STATUS, buf, MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN, MAVLINK_MSG_ID_NDI_STATUS_LEN, MAVLINK_MSG_ID_NDI_STATUS_CRC);
 #else
@@ -328,6 +350,8 @@ static inline void mavlink_msg_ndi_status_send(mavlink_channel_t chan, uint64_t 
     packet.err_bound = err_bound;
     packet.filtered_airsp = filtered_airsp;
     packet.filtered_fpa = filtered_fpa;
+    packet.filtered_airsp_rate = filtered_airsp_rate;
+    packet.filtered_fpa_rate = filtered_fpa_rate;
     packet.air_density = air_density;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NDI_STATUS, (const char *)&packet, MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN, MAVLINK_MSG_ID_NDI_STATUS_LEN, MAVLINK_MSG_ID_NDI_STATUS_CRC);
@@ -342,7 +366,7 @@ static inline void mavlink_msg_ndi_status_send(mavlink_channel_t chan, uint64_t 
 static inline void mavlink_msg_ndi_status_send_struct(mavlink_channel_t chan, const mavlink_ndi_status_t* ndi_status)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_ndi_status_send(chan, ndi_status->timestamp, ndi_status->airsp_setpoint_raw, ndi_status->fpa_setpoint_raw, ndi_status->roll_setpoint_raw, ndi_status->airsp_setpoint, ndi_status->fpa_setpoint, ndi_status->roll_setpoint, ndi_status->throt_setpoint, ndi_status->throt_fb, ndi_status->throt_trim, ndi_status->pitch_setpoint, ndi_status->pitch_fb, ndi_status->pitch_trim, ndi_status->err_bound, ndi_status->filtered_airsp, ndi_status->filtered_fpa, ndi_status->air_density);
+    mavlink_msg_ndi_status_send(chan, ndi_status->timestamp, ndi_status->airsp_setpoint_raw, ndi_status->fpa_setpoint_raw, ndi_status->roll_setpoint_raw, ndi_status->airsp_setpoint, ndi_status->fpa_setpoint, ndi_status->roll_setpoint, ndi_status->throt_setpoint, ndi_status->throt_fb, ndi_status->throt_trim, ndi_status->pitch_setpoint, ndi_status->pitch_fb, ndi_status->pitch_trim, ndi_status->err_bound, ndi_status->filtered_airsp, ndi_status->filtered_fpa, ndi_status->filtered_airsp_rate, ndi_status->filtered_fpa_rate, ndi_status->air_density);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NDI_STATUS, (const char *)ndi_status, MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN, MAVLINK_MSG_ID_NDI_STATUS_LEN, MAVLINK_MSG_ID_NDI_STATUS_CRC);
 #endif
@@ -356,7 +380,7 @@ static inline void mavlink_msg_ndi_status_send_struct(mavlink_channel_t chan, co
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_ndi_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t timestamp, float airsp_setpoint_raw, float fpa_setpoint_raw, float roll_setpoint_raw, float airsp_setpoint, float fpa_setpoint, float roll_setpoint, float throt_setpoint, float throt_fb, float throt_trim, float pitch_setpoint, float pitch_fb, float pitch_trim, float err_bound, float filtered_airsp, float filtered_fpa, float air_density)
+static inline void mavlink_msg_ndi_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t timestamp, float airsp_setpoint_raw, float fpa_setpoint_raw, float roll_setpoint_raw, float airsp_setpoint, float fpa_setpoint, float roll_setpoint, float throt_setpoint, float throt_fb, float throt_trim, float pitch_setpoint, float pitch_fb, float pitch_trim, float err_bound, float filtered_airsp, float filtered_fpa, float filtered_airsp_rate, float filtered_fpa_rate, float air_density)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -376,7 +400,9 @@ static inline void mavlink_msg_ndi_status_send_buf(mavlink_message_t *msgbuf, ma
     _mav_put_float(buf, 56, err_bound);
     _mav_put_float(buf, 60, filtered_airsp);
     _mav_put_float(buf, 64, filtered_fpa);
-    _mav_put_float(buf, 68, air_density);
+    _mav_put_float(buf, 68, filtered_airsp_rate);
+    _mav_put_float(buf, 72, filtered_fpa_rate);
+    _mav_put_float(buf, 76, air_density);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NDI_STATUS, buf, MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN, MAVLINK_MSG_ID_NDI_STATUS_LEN, MAVLINK_MSG_ID_NDI_STATUS_CRC);
 #else
@@ -397,6 +423,8 @@ static inline void mavlink_msg_ndi_status_send_buf(mavlink_message_t *msgbuf, ma
     packet->err_bound = err_bound;
     packet->filtered_airsp = filtered_airsp;
     packet->filtered_fpa = filtered_fpa;
+    packet->filtered_airsp_rate = filtered_airsp_rate;
+    packet->filtered_fpa_rate = filtered_fpa_rate;
     packet->air_density = air_density;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_NDI_STATUS, (const char *)packet, MAVLINK_MSG_ID_NDI_STATUS_MIN_LEN, MAVLINK_MSG_ID_NDI_STATUS_LEN, MAVLINK_MSG_ID_NDI_STATUS_CRC);
@@ -570,13 +598,33 @@ static inline float mavlink_msg_ndi_status_get_filtered_fpa(const mavlink_messag
 }
 
 /**
+ * @brief Get field filtered_airsp_rate from ndi_status message
+ *
+ * @return [m/s^2] Filtered airspeed rate
+ */
+static inline float mavlink_msg_ndi_status_get_filtered_airsp_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  68);
+}
+
+/**
+ * @brief Get field filtered_fpa_rate from ndi_status message
+ *
+ * @return [deg/s] Filtered flight path angle rate
+ */
+static inline float mavlink_msg_ndi_status_get_filtered_fpa_rate(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  72);
+}
+
+/**
  * @brief Get field air_density from ndi_status message
  *
  * @return [kg/m^3] Calculated air density
  */
 static inline float mavlink_msg_ndi_status_get_air_density(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  68);
+    return _MAV_RETURN_float(msg,  76);
 }
 
 /**
@@ -604,6 +652,8 @@ static inline void mavlink_msg_ndi_status_decode(const mavlink_message_t* msg, m
     ndi_status->err_bound = mavlink_msg_ndi_status_get_err_bound(msg);
     ndi_status->filtered_airsp = mavlink_msg_ndi_status_get_filtered_airsp(msg);
     ndi_status->filtered_fpa = mavlink_msg_ndi_status_get_filtered_fpa(msg);
+    ndi_status->filtered_airsp_rate = mavlink_msg_ndi_status_get_filtered_airsp_rate(msg);
+    ndi_status->filtered_fpa_rate = mavlink_msg_ndi_status_get_filtered_fpa_rate(msg);
     ndi_status->air_density = mavlink_msg_ndi_status_get_air_density(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_NDI_STATUS_LEN? msg->len : MAVLINK_MSG_ID_NDI_STATUS_LEN;
