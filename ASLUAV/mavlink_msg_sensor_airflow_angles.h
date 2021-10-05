@@ -3,14 +3,14 @@
 
 #define MAVLINK_MSG_ID_SENSOR_AIRFLOW_ANGLES 215
 
-MAVPACKED(
+
 typedef struct __mavlink_sensor_airflow_angles_t {
  uint64_t timestamp; /*< [us] Timestamp*/
  float angleofattack; /*< [deg] Angle of attack*/
  float sideslip; /*< [deg] Sideslip angle*/
  uint8_t angleofattack_valid; /*<  Angle of attack measurement valid*/
  uint8_t sideslip_valid; /*<  Sideslip angle measurement valid*/
-}) mavlink_sensor_airflow_angles_t;
+} mavlink_sensor_airflow_angles_t;
 
 #define MAVLINK_MSG_ID_SENSOR_AIRFLOW_ANGLES_LEN 18
 #define MAVLINK_MSG_ID_SENSOR_AIRFLOW_ANGLES_MIN_LEN 18

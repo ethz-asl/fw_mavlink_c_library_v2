@@ -3,7 +3,7 @@
 
 #define MAVLINK_MSG_ID_SATCOM_LINK_STATUS 214
 
-MAVPACKED(
+
 typedef struct __mavlink_satcom_link_status_t {
  uint64_t timestamp; /*< [us] Timestamp*/
  uint64_t last_heartbeat; /*< [us] Timestamp of the last successful sbd session*/
@@ -13,7 +13,7 @@ typedef struct __mavlink_satcom_link_status_t {
  uint8_t ring_pending; /*<  Ring call pending*/
  uint8_t tx_session_pending; /*<  Transmission session pending*/
  uint8_t rx_session_pending; /*<  Receiving session pending*/
-}) mavlink_satcom_link_status_t;
+} mavlink_satcom_link_status_t;
 
 #define MAVLINK_MSG_ID_SATCOM_LINK_STATUS_LEN 24
 #define MAVLINK_MSG_ID_SATCOM_LINK_STATUS_MIN_LEN 24
